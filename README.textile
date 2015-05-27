@@ -1,0 +1,50 @@
+h1. LED8x16tetris
+
+_A full color 8x16 tetris game._
+
+h2. About
+
+A game of tetris using WS2811 LEDs, a xinda joystick, and an Arduino UNO.
+It tries to adhere to the standard rules as much as possible, including
+wall kicks and increasing difficulty.
+
+h2. Get it
+
+Please visit "Our homepage":http://www.marginallyclever.com/ for an explanation of how it works.
+
+h2. Get help
+
+Please visit "the forums":https://marginallyclever.com/forum 
+
+h2. Special thanks
+
+Hey, thanks for taking the time to read this.  You're thorough.  I like that!
+
+h2. Notes
+
+More details are in the code itself.
+
+h2. Legal
+
+
+This file is part of LED8x16tetris.
+
+LED8x16tetris is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+LED8x16tetris is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with LED8x16tetris. If not, see http://www.gnu.org/licenses/
+
+
+h2. See Also
+
+* "Our homepage":https://www.marginallyclever.com/ 
+* "The wiki":https://learn.marginallyclever.com/
+* "The forums":https://marginallyclever.com/forum/
