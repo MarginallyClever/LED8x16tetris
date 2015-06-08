@@ -52,8 +52,13 @@
 #define JOYSTICK_PIN        (0)
 
 // gravity options
-#define DROP_MINIMUM        (50)  // top speed gravity can reach
+#define DROP_MINIMUM        (25)  // top speed gravity can reach
 #define DROP_ACCELERATION   (20)  // how fast gravity increases
+
+
+#define INITIAL_MOVE_DELAY  (100)
+#define INITIAL_DROP_DELAY  (500)
+#define INITIAL_DRAW_DELAY  (30)
 
 
 // 1 color drawings of each piece in each rotation.
@@ -273,14 +278,14 @@ char sequence_i=NUM_PIECE_TYPES;
 
 // this controls how fast the player can move.
 long last_move;
-long move_delay=100;  // 100ms = 5 times a second
+long move_delay;  // 100ms = 5 times a second
 
 // this controls when the piece automatically falls.
 long last_drop;
-long drop_delay=500;  // 500ms = 2 times a second
+long drop_delay;  // 500ms = 2 times a second
 
 long last_draw;
-long draw_delay=30;  // 60 fps
+long draw_delay;  // 60 fps
 
 // this is how arduino remembers where pieces are on the grid.
 long grid[GRID_W*GRID_H];
@@ -427,14 +432,9 @@ void remove_full_rows() {
     if(c==GRID_W) {
       // row full!
       delete_row(y);
-      row_removed=1;
+      fall_faster();
     }
   }  
-  
-  if(row_removed == 1) {
-    // game accelerates slower if you remove many lines at once.
-    fall_faster();
-  }
 }
 
 
@@ -482,11 +482,11 @@ void try_to_rotate_piece() {
       piece_rotation = new_pr;
     } else {
       // wall kick
-      if(!piece_off_edge(piece_x-1,piece_y,new_pr)) {
-        piece_x-=1;
+      if(piece_can_fit(piece_x-1,piece_y,new_pr)) {
+        piece_x = piece_x-1;
         piece_rotation = new_pr;
-      } else if(!piece_off_edge(piece_x+1,piece_y,new_pr)) {
-        piece_x-=1;
+      } else if(piece_can_fit(piece_x+1,piece_y,new_pr)) {
+        piece_x = piece_x+1;
         piece_rotation = new_pr;
       } 
     }
@@ -546,14 +546,17 @@ int piece_hits_rubble(int px,int py,int pr) {
 void game_over() {
   int x,y;
 
-  while(1) {
+  long over_time = millis();
+  
+  while(millis() - over_time < 3000) {
     // click the button?
     if(digitalRead(1)==0) {
       // restart!
-      setup();
-      return;
+      break;
     }
   }
+  setup();
+  return;
 }
 
 
@@ -632,11 +635,15 @@ void setup() {
   }
   
   // make the game a bit more random - pull a number from space and use it to 'seed' a crop of random numbers.
-  randomSeed(analogRead(1));
+  randomSeed(analogRead(1)+analogRead(2)+analogRead(3));
   
   // get ready to start the game.
   choose_new_piece();
   
+  move_delay=INITIAL_MOVE_DELAY;
+  drop_delay=INITIAL_DROP_DELAY;
+  draw_delay=INITIAL_DRAW_DELAY;
+
   // start the game clock after everything else is ready.
   last_draw = last_drop = last_move = millis();
 }
